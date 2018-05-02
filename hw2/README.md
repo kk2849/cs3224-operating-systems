@@ -4,7 +4,7 @@ Write an x86 boot sector that implements a simple guessing game. You should ask 
 for a number from 0 to 9, read their response, and then tell them if they got it right or
 wrong. If they got it right, print a success message and then loop forever.
 
-```assembly
+```
  What number am I thinking of (0-9)? 4
  Wrong!
  What number am I thinking of (0-9)? 9
