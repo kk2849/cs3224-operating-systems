@@ -1,6 +1,6 @@
-#Homework 3: xv6 System Calls
+# Homework 3: xv6 System Calls
 
-##Part 1: Call Tracing 
+## Part 1: Call Tracing 
 Modify the xv6 kernel to print out the name of the system call and its return value for each
 system call invocation. You do not have to print the system call arguments.
 Upon completion, when you first boot up xv6 you should see output similar to:
@@ -20,7 +20,7 @@ Hints:
 2. Think about who is responsible for keep track of the return codes for the system
 calls.
 
-##Part 2: Date System Call
+## Part 2: Date System Call
 Now add a new system call to xv6 that will get the current UTC time and return the EST
 (EASTERN STANDARD TIME) to the user program. You may use the cmosttime( ) help
 function to read the real time clock. The struct rctdate struct is defined in the date.h file.
