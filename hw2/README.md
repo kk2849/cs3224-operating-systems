@@ -38,7 +38,7 @@ message character by character.
 .code16 # Use 16-bit assembly
 .globl start # This tells the linker where we want to start executing
 start:
- movw $message, %si # load the offset of our message into %si
+ &nbsp movw $message, %si # load the offset of our message into %si
  movb $0x00,%ah # 0x00 - set video mode
  movb $0x03,%al # 0x03 - 80x25 text mode
  int $0x10 # call into the BIOS
