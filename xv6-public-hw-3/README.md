@@ -15,6 +15,7 @@ write->1
 ```
 Note that the output of the shell and the system call trace are intermixed (e.g. the $write ->
 1). This is due to the fact that the shell utilized the write system call to print its output.
+
 Hints:
 1. You will primarily be working in syscall.c
 2. Think about who is responsible for keep track of the return codes for the system
@@ -29,6 +30,7 @@ system call. When done, typing date to the xv6 prompt should print the current E
 
 You may either have the system call return the UTC time, then convert to EST time or you
 may have the system call return the EST time.
+
 Hints:
 1. When making your date system call, you should focus on mimicking all the pieces of
 code that are specific for some existing system call, for example the “uptime” system
