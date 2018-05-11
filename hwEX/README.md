@@ -5,7 +5,7 @@ The extra credit assignment is a binary bomb defusal.  The objective of this ass
 The full writeup can be viewed in bomblab.pdf
 
 ## Solution
-The solution to my bomb can be viewed in bomb168/sol.txt.  The bomb can be tested by the UNIX commands:
+The solution to my bomb can be viewed in bomb168/sol.txt.  The bomb can be tested by the UNIX command:
 ```
 run bomb sol.txt
 ```
