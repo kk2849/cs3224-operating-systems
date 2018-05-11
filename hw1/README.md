@@ -71,7 +71,7 @@ swap –xv6 –x86 README
 ```
 Would swap all occurrences of xv6 with x86 in the file README and print them out. Note that in this case both the string to be replaced and the replace with string are the same size.
 
-Part 5: Extra Credit Extension to sed (10 points)
+## Part 5: Extra Credit Extension to sed (10 points)
 Extend part 4 to accept strings of different sizes. This way you can call sed the following way:
 ```
 swap –xv6 –UNIX README
