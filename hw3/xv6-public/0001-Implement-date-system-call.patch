@@ -1,0 +1,145 @@
+From 3418ddd0de2fbe9931e76db7c0ecce0caa12138e Mon Sep 17 00:00:00 2001
+From: Kevin <kk2849@nyu.edu>
+Date: Sun, 11 Mar 2018 22:21:23 -0400
+Subject: [PATCH] Implement date system call
+
+---
+ Makefile  |  3 ++-
+ syscall.c | 32 ++++++++++++++++++++++++++++++++
+ syscall.h |  1 +
+ sysproc.c | 12 ++++++++++++
+ user.h    |  1 +
+ usys.S    |  1 +
+ 6 files changed, 49 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index b4fd9a2..f7a3108 100644
+--- a/Makefile
++++ b/Makefile
+@@ -172,6 +172,7 @@ UPROGS=\
+ 	_usertests\
+ 	_wc\
+ 	_zombie\
++	_date\
+ 
+ fs.img: mkfs README $(UPROGS)
+ 	./mkfs fs.img README $(UPROGS)
+@@ -210,7 +211,7 @@ QEMUGDB = $(shell if $(QEMU) -help | grep -q '^-gdb'; \
+ ifndef CPUS
+ CPUS := 2
+ endif
+-QEMUOPTS = -hdb fs.img xv6.img -smp $(CPUS) -m 512 $(QEMUEXTRA)
++QEMUOPTS = -hdb fs.img xv6.img -smp $(CPUS) -m 512 $(QEMUEXTRA) -display none
+ 
+ qemu: fs.img xv6.img
+ 	$(QEMU) -serial mon:stdio $(QEMUOPTS)
+diff --git a/syscall.c b/syscall.c
+index 799ebc2..6f43ed2 100644
+--- a/syscall.c
++++ b/syscall.c
+@@ -98,6 +98,7 @@ extern int sys_unlink(void);
+ extern int sys_wait(void);
+ extern int sys_write(void);
+ extern int sys_uptime(void);
++extern int sys_date(void);
+ 
+ static int (*syscalls[])(void) = {
+ [SYS_fork]    sys_fork,
+@@ -121,6 +122,7 @@ static int (*syscalls[])(void) = {
+ [SYS_link]    sys_link,
+ [SYS_mkdir]   sys_mkdir,
+ [SYS_close]   sys_close,
++[SYS_date]    sys_date,
+ };
+ 
+ void
+@@ -131,6 +133,36 @@ syscall(void)
+   num = proc->tf->eax;
+   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
+     proc->tf->eax = syscalls[num]();
++/*
++Print out the name of the system call and its return value 
++for each system call invocation which is stored in proc->tf->eax.
++Each system call has a number as identified in syscall.h and by
++checking the number in proc->tf->eax, we can identify the type
++of system call and store it in num.
++
++if (num == SYS_fork) 	{cprintf("fork-> %d\n", proc->tf->eax);}
++if (num == SYS_exit) 	{cprintf("exit-> %d\n", proc->tf->eax);}
++if (num == SYS_wait) 	{cprintf("wait-> %d\n", proc->tf->eax);}
++if (num == SYS_pipe) 	{cprintf("pipe-> %d\n", proc->tf->eax);}
++if (num == SYS_read) 	{cprintf("read-> %d\n", proc->tf->eax);}
++if (num == SYS_kill) 	{cprintf("kill-> %d\n", proc->tf->eax);}
++if (num == SYS_exec) 	{cprintf("exec-> %d\n", proc->tf->eax);}
++if (num == SYS_fstat) 	{cprintf("fstat-> %d\n", proc->tf->eax);}
++if (num == SYS_chdir)	{cprintf("chdir-> %d\n", proc->tf->eax);}
++if (num == SYS_dup) 	{cprintf("dup-> %d\n", proc->tf->eax);}
++if (num == SYS_getpid)	{cprintf("getpid-> %d\n", proc->tf->eax);}
++if (num == SYS_sbrk) 	{cprintf("sbrk-> %d\n", proc->tf->eax);}
++if (num == SYS_sleep) 	{cprintf("sleep-> %d\n", proc->tf->eax);}
++if (num == SYS_uptime) 	{cprintf("uptime-> %d\n", proc->tf->eax);}
++if (num == SYS_open) 	{cprintf("open-> %d\n", proc->tf->eax);}
++if (num == SYS_write) 	{cprintf("write-> %d\n", proc->tf->eax);}
++if (num == SYS_mknod) 	{cprintf("mknod-> %d\n", proc->tf->eax);}
++if (num == SYS_unlink) 	{cprintf("unlink-> %d\n", proc->tf->eax);}
++if (num == SYS_link) 	{cprintf("link-> %d\n", proc->tf->eax);}
++if (num == SYS_mkdir) 	{cprintf("mkdir-> %d\n", proc->tf->eax);}
++if (num == SYS_close) 	{cprintf("close-> %d\n", proc->tf->eax);}
++if (num == SYS_date) 	{cprintf("date-> %d\n", proc->tf->eax);}*/
++
+   } else {
+     cprintf("%d %s: unknown sys call %d\n",
+             proc->pid, proc->name, num);
+diff --git a/syscall.h b/syscall.h
+index bc5f356..1a620b9 100644
+--- a/syscall.h
++++ b/syscall.h
+@@ -20,3 +20,4 @@
+ #define SYS_link   19
+ #define SYS_mkdir  20
+ #define SYS_close  21
++#define SYS_date   22
+diff --git a/sysproc.c b/sysproc.c
+index 027a5e5..da084dd 100644
+--- a/sysproc.c
++++ b/sysproc.c
+@@ -89,3 +89,15 @@ sys_uptime(void)
+   release(&tickslock);
+   return xticks;
+ }
++
++// return date in month-day-year, hr:min:sec
++int
++sys_date(void)
++{ 
++  struct rtcdate *r;
++
++  if(argptr(0, (void*)&r, sizeof(&r)) < 0)
++    return -1;
++  cmostime(r);
++  return 0;
++}
+diff --git a/user.h b/user.h
+index f45b8d5..4eafb26 100644
+--- a/user.h
++++ b/user.h
+@@ -23,6 +23,7 @@ int getpid(void);
+ char* sbrk(int);
+ int sleep(int);
+ int uptime(void);
++int date(struct rtcdate*);
+ 
+ // ulib.c
+ int stat(char*, struct stat*);
+diff --git a/usys.S b/usys.S
+index 8bfd8a1..ba76d54 100644
+--- a/usys.S
++++ b/usys.S
+@@ -29,3 +29,4 @@ SYSCALL(getpid)
+ SYSCALL(sbrk)
+ SYSCALL(sleep)
+ SYSCALL(uptime)
++SYSCALL(date)
+-- 
+2.7.4
+
