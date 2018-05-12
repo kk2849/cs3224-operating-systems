@@ -19,3 +19,25 @@ realistic development environment.
 We will examine in detail the design and implementation of a UNIX-like operating system, 
 and cover general operating systems concepts, such as processes, threads, device drivers, 
 filesystems, scheduling, and concurrency.
+
+## xv6
+xv6 is a trimmed down, simplified UNIX-like operating system that was used to learn operating system concepts.
+In order to use xv6 on Windows 10, I installed Bash Ubuntu which allows me to run LINUX environment shell.  The xv6 shell provides an emulator called QEMU which was used to run xv6 with the command:
+```
+make qemu
+```
+
+xv6 can be installed by following the directions in:
+```
+xv6_installation_instructions.pdf
+```
+
+A full textbook writeup can be found in:
+```
+xv6-textbook-rev8.pdf
+```
+
+xv6 documentation can be found in:
+```
+xv6-rev8.pdf
+```
