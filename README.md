@@ -21,8 +21,12 @@ and cover general operating systems concepts, such as processes, threads, device
 filesystems, scheduling, and concurrency.
 
 ## xv6
+xv6 is a re−implementation of Dennis Ritchie’s and Ken Thompson’s Unix
+Version 6 (v6). xv6 loosely follows the structure and style of v6,
+but is implemented for a modern x86−based multiprocessor using ANSI C.
+
 xv6 is a trimmed down, simplified UNIX-like operating system that was used to learn operating system concepts.
-In order to use xv6 on Windows 10, I installed Bash Ubuntu which allows me to run LINUX environment shell.  The xv6 shell provides an emulator called QEMU which was used to run xv6 with the command:
+In order to use xv6 on Windows 10, I installed Bash Ubuntu which allows me to run a LINUX environment shell.  The xv6 shell provides an emulator called QEMU which was used to run xv6 with the command:
 ```
 make qemu
 ```
